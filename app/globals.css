@@ -4,6 +4,8 @@
 
 :root {
   color-scheme: dark;
+  --gold: #e8b923;
+  --gold-glow: rgba(232, 185, 35, 0.35);
 }
 
 * {
@@ -19,11 +21,11 @@ body {
   margin: 0;
   overflow-x: hidden;
   background:
-    radial-gradient(circle at 15% 0%, rgba(69, 234, 255, 0.16), transparent 30rem),
-    radial-gradient(circle at 85% 10%, rgba(139, 92, 246, 0.20), transparent 34rem),
-    radial-gradient(circle at 50% 100%, rgba(59, 130, 246, 0.10), transparent 34rem),
-    #050712;
-  color: #f8fbff;
+    radial-gradient(ellipse 80% 50% at 20% -10%, rgba(232, 185, 35, 0.12), transparent),
+    radial-gradient(ellipse 60% 40% at 90% 5%, rgba(245, 158, 11, 0.08), transparent),
+    radial-gradient(ellipse 70% 50% at 50% 100%, rgba(217, 119, 6, 0.06), transparent),
+    #080706;
+  color: #faf8f4;
 }
 
 body::before {
@@ -32,38 +34,100 @@ body::before {
   inset: 0;
   pointer-events: none;
   background:
-    linear-gradient(rgba(255,255,255,.024) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(255,255,255,.024) 1px, transparent 1px);
-  background-size: 44px 44px;
-  mask-image: linear-gradient(to bottom, rgba(0,0,0,.95), transparent 80%);
+    linear-gradient(rgba(232, 185, 35, 0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(232, 185, 35, 0.03) 1px, transparent 1px);
+  background-size: 48px 48px;
+  mask-image: linear-gradient(to bottom, rgba(0, 0, 0, 0.9), transparent 75%);
+}
+
+body::after {
+  content: "";
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  background: radial-gradient(circle at 50% 0%, rgba(255, 229, 102, 0.04), transparent 40%);
 }
 
 ::selection {
-  background: rgba(69, 234, 255, .28);
+  background: rgba(232, 185, 35, 0.35);
+  color: #fff;
 }
 
 .glass {
-  border: 1px solid rgba(148, 219, 255, .16);
-  background: linear-gradient(180deg, rgba(255,255,255,.08), rgba(255,255,255,.035));
-  box-shadow: 0 24px 80px rgba(0,0,0,.45);
-  backdrop-filter: blur(18px);
+  border: 1px solid rgba(232, 185, 35, 0.12);
+  background: linear-gradient(
+    165deg,
+    rgba(255, 255, 255, 0.06) 0%,
+    rgba(255, 255, 255, 0.02) 100%
+  );
+  box-shadow: 0 24px 80px rgba(0, 0, 0, 0.45), inset 0 1px 0 rgba(255, 229, 102, 0.06);
+  backdrop-filter: blur(20px);
+}
+
+.glass-gold {
+  border: 1px solid rgba(232, 185, 35, 0.2);
+  background: linear-gradient(
+    165deg,
+    rgba(232, 185, 35, 0.08) 0%,
+    rgba(255, 255, 255, 0.02) 100%
+  );
+  box-shadow: 0 24px 80px rgba(0, 0, 0, 0.45), 0 0 40px rgba(232, 185, 35, 0.06);
+  backdrop-filter: blur(20px);
 }
 
 .text-gradient {
-  background: linear-gradient(135deg, #ffffff 0%, #45eaff 42%, #8b5cf6 100%);
+  background: linear-gradient(135deg, #ffe566 0%, #e8b923 40%, #f59e0b 100%);
   -webkit-background-clip: text;
+  background-clip: text;
   color: transparent;
 }
 
+.text-gradient-subtle {
+  background: linear-gradient(135deg, #faf8f4 0%, #e8b923 60%, #f5d547 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.btn-primary {
+  @apply inline-flex items-center gap-2 rounded-full bg-gold-gradient px-5 py-3 font-bold text-voltage-bg shadow-glow-sm transition hover:brightness-110 active:scale-[0.98];
+}
+
+.btn-ghost {
+  @apply inline-flex items-center gap-2 rounded-full border border-voltage-gold/20 bg-white/5 px-5 py-3 font-bold text-white transition hover:border-voltage-gold/40 hover:bg-voltage-gold/10;
+}
+
 .code-scroll::-webkit-scrollbar {
-  height: 9px;
+  height: 8px;
 }
 
 .code-scroll::-webkit-scrollbar-track {
-  background: rgba(255,255,255,.05);
+  background: rgba(255, 255, 255, 0.04);
+  border-radius: 999px;
 }
 
 .code-scroll::-webkit-scrollbar-thumb {
-  background: rgba(69, 234, 255, .34);
+  background: rgba(232, 185, 35, 0.4);
   border-radius: 999px;
+}
+
+details summary {
+  list-style: none;
+}
+
+details summary::-webkit-details-marker {
+  display: none;
+}
+
+details summary::after {
+  content: "+";
+  float: right;
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: var(--gold);
+  transition: transform 0.2s;
+}
+
+details[open] summary::after {
+  content: "−";
 }

@@ -10,7 +10,6 @@ import {
   Download,
   ExternalLink,
   FileArchive,
-  Github,
   Menu,
   MonitorDown,
   RefreshCw,
@@ -119,6 +118,13 @@ const faqs = [
   },
 ];
 
+const fadeUp = {
+  initial: { opacity: 0, y: 24 },
+  whileInView: { opacity: 1, y: 0 },
+  viewport: { once: true, margin: "-60px" },
+  transition: { duration: 0.5 },
+};
+
 function copyText(text, setCopied) {
   navigator.clipboard.writeText(text).then(() => {
     setCopied(true);
@@ -130,24 +136,24 @@ function CodeBlock({ label = "Command", code }) {
   const [copied, setCopied] = useState(false);
 
   return (
-    <div className="mt-4 overflow-hidden rounded-2xl border border-cyan-200/15 bg-[#030712]/90">
-      <div className="flex items-center justify-between gap-3 border-b border-cyan-200/10 bg-cyan-300/[0.06] px-4 py-3">
-        <div className="flex items-center gap-2 text-xs font-black uppercase tracking-[0.22em] text-cyan-200">
-          <Terminal size={15} />
+    <div className="mt-4 overflow-hidden rounded-2xl border border-voltage-gold/15 bg-voltage-bg/80">
+      <div className="flex items-center justify-between gap-3 border-b border-voltage-gold/10 bg-voltage-gold/[0.06] px-4 py-3">
+        <div className="flex items-center gap-2 text-xs font-bold uppercase tracking-[0.2em] text-voltage-gold-light">
+          <Terminal size={14} />
           {label}
         </div>
         <button
           onClick={() => copyText(code, setCopied)}
-          className={`rounded-full px-3 py-1.5 text-xs font-black transition ${
+          className={`rounded-full px-3 py-1.5 text-xs font-bold transition ${
             copied
-              ? "bg-cyan-200 text-slate-950"
-              : "border border-cyan-200/20 bg-white/5 text-white hover:bg-cyan-200/10"
+              ? "bg-voltage-gold text-voltage-bg"
+              : "border border-voltage-gold/25 bg-white/5 text-voltage-gold-light hover:bg-voltage-gold/10"
           }`}
         >
           {copied ? "Copied" : "Copy"}
         </button>
       </div>
-      <pre className="code-scroll overflow-x-auto p-4 text-sm leading-7 text-cyan-50">
+      <pre className="code-scroll overflow-x-auto p-4 font-mono text-sm leading-7 text-voltage-gold-bright/90">
         <code>{code}</code>
       </pre>
     </div>
@@ -156,16 +162,14 @@ function CodeBlock({ label = "Command", code }) {
 
 function SectionTitle({ tag, title, icon: Icon }) {
   return (
-    <div className="mb-7 flex items-end justify-between gap-4">
-      <div>
-        <p className="mb-2 flex items-center gap-2 text-xs font-black uppercase tracking-[0.26em] text-cyan-300">
-          {Icon && <Icon size={15} />}
-          {tag}
-        </p>
-        <h2 className="text-3xl font-black tracking-[-0.05em] text-white md:text-5xl">
-          {title}
-        </h2>
-      </div>
+    <div className="mb-8">
+      <p className="mb-2 flex items-center gap-2 text-xs font-bold uppercase tracking-[0.24em] text-voltage-gold">
+        {Icon && <Icon size={14} />}
+        {tag}
+      </p>
+      <h2 className="font-display text-3xl font-extrabold tracking-tight text-white md:text-4xl">
+        {title}
+      </h2>
     </div>
   );
 }
@@ -173,19 +177,16 @@ function SectionTitle({ tag, title, icon: Icon }) {
 function StepCard({ index, title, body, command }) {
   return (
     <motion.div
-      initial={{ opacity: 0, y: 22 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true, margin: "-80px" }}
-      transition={{ duration: 0.45 }}
-      className="rounded-3xl border border-cyan-200/10 bg-white/[0.045] p-4 md:p-5"
+      {...fadeUp}
+      className="group rounded-2xl border border-voltage-gold/10 bg-voltage-surface/40 p-5 transition hover:border-voltage-gold/25 hover:bg-voltage-gold/[0.04]"
     >
       <div className="flex gap-4">
-        <div className="grid h-12 w-12 shrink-0 place-items-center rounded-2xl bg-gradient-to-br from-cyan-200 via-cyan-300 to-blue-500 text-lg font-black text-slate-950 shadow-glow">
+        <div className="grid h-11 w-11 shrink-0 place-items-center rounded-xl bg-gold-gradient font-display text-base font-extrabold text-voltage-bg shadow-glow-sm">
           {index}
         </div>
         <div className="min-w-0 flex-1">
-          <h3 className="text-lg font-black text-white">{title}</h3>
-          <p className="mt-1 text-slate-300">{body}</p>
+          <h3 className="font-display text-lg font-bold text-white">{title}</h3>
+          <p className="mt-1.5 text-voltage-muted leading-relaxed">{body}</p>
           {command && <CodeBlock code={command} />}
         </div>
       </div>
@@ -198,27 +199,28 @@ export default function Page() {
 
   return (
     <main className="relative">
-      <div className="pointer-events-none fixed left-[-8rem] top-24 h-80 w-80 rounded-full bg-cyan-400/20 blur-3xl" />
-      <div className="pointer-events-none fixed bottom-10 right-[-8rem] h-96 w-96 rounded-full bg-violet-500/20 blur-3xl" />
+      <div className="pointer-events-none fixed left-[-6rem] top-20 h-72 w-72 animate-pulse-glow rounded-full bg-voltage-gold/15 blur-3xl" />
+      <div className="pointer-events-none fixed bottom-0 right-[-6rem] h-80 w-80 animate-pulse-glow rounded-full bg-voltage-amber/10 blur-3xl" />
 
-      <header className="sticky top-0 z-50 border-b border-cyan-200/10 bg-[#050712]/70 backdrop-blur-2xl">
-        <div className="mx-auto flex max-w-7xl items-center justify-between px-4 py-4">
-          <a href="#top" className="flex items-center gap-3">
-            <div className="grid h-11 w-11 place-items-center rounded-2xl bg-gradient-to-br from-cyan-200 via-blue-500 to-violet-500 text-xl font-black text-slate-950 shadow-glow">
-              V
+      <header className="sticky top-0 z-50 border-b border-voltage-gold/10 bg-voltage-bg/80 backdrop-blur-xl">
+        <div className="mx-auto flex max-w-6xl items-center justify-between px-5 py-4">
+          <a href="#top" className="group flex items-center gap-3">
+            <div className="relative grid h-10 w-10 place-items-center rounded-xl bg-gold-gradient font-display text-lg font-extrabold text-voltage-bg shadow-glow-sm">
+              <Zap size={18} className="absolute opacity-0 transition group-hover:opacity-100" />
+              <span className="transition group-hover:opacity-0">V</span>
             </div>
             <div>
-              <p className="font-black leading-5 text-white">Voltage Guide</p>
-              <p className="text-xs font-semibold text-slate-400">sunny / mojito</p>
+              <p className="font-display font-bold leading-tight text-white">Voltage Guide</p>
+              <p className="text-xs text-voltage-muted">sunny / mojito</p>
             </div>
           </a>
 
-          <nav className="hidden items-center gap-1 md:flex">
+          <nav className="hidden items-center gap-0.5 md:flex">
             {navItems.map((item) => (
               <a
                 key={item.href}
                 href={item.href}
-                className="rounded-full px-4 py-2 text-sm font-bold text-slate-300 transition hover:bg-cyan-300/10 hover:text-white"
+                className="rounded-full px-4 py-2 text-sm font-medium text-voltage-muted transition hover:bg-voltage-gold/10 hover:text-voltage-gold-light"
               >
                 {item.label}
               </a>
@@ -226,205 +228,249 @@ export default function Page() {
           </nav>
 
           <button
-            className="rounded-2xl border border-cyan-200/15 bg-white/5 p-2 md:hidden"
+            className="rounded-xl border border-voltage-gold/15 bg-voltage-surface/50 p-2.5 text-voltage-gold-light md:hidden"
             onClick={() => setOpenMenu(!openMenu)}
             aria-label="Toggle menu"
           >
-            {openMenu ? <X /> : <Menu />}
+            {openMenu ? <X size={20} /> : <Menu size={20} />}
           </button>
         </div>
 
         {openMenu && (
-          <div className="mx-4 mb-4 rounded-3xl border border-cyan-200/10 bg-[#080c18] p-3 md:hidden">
+          <motion.div
+            initial={{ opacity: 0, y: -8 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="mx-4 mb-4 rounded-2xl border border-voltage-gold/10 bg-voltage-panel p-2 md:hidden"
+          >
             {navItems.map((item) => (
               <a
                 key={item.href}
                 href={item.href}
                 onClick={() => setOpenMenu(false)}
-                className="block rounded-2xl px-4 py-3 font-bold text-slate-300 hover:bg-cyan-300/10 hover:text-white"
+                className="block rounded-xl px-4 py-3 font-medium text-voltage-muted hover:bg-voltage-gold/10 hover:text-white"
               >
                 {item.label}
               </a>
             ))}
-          </div>
+          </motion.div>
         )}
       </header>
 
-      <section id="top" className="mx-auto grid max-w-7xl gap-5 px-4 pb-6 pt-16 md:grid-cols-[1.5fr_.8fr] md:pt-24">
+      <section
+        id="top"
+        className="mx-auto grid max-w-6xl gap-6 px-5 pb-8 pt-14 md:grid-cols-[1.4fr_0.7fr] md:pt-20"
+      >
         <motion.div
           initial={{ opacity: 0, y: 28 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.65 }}
-          className="glass overflow-hidden rounded-[2rem] p-6 md:p-10"
+          transition={{ duration: 0.6 }}
+          className="glass-gold relative overflow-hidden rounded-3xl p-7 md:p-10"
         >
-          <div className="mb-5 inline-flex items-center gap-2 rounded-full border border-cyan-200/15 bg-cyan-300/10 px-4 py-2 text-xs font-black uppercase tracking-[0.22em] text-cyan-200">
-            <Zap size={15} />
-            Redmi Note 10
-          </div>
+          <div className="pointer-events-none absolute inset-0 bg-gold-shine" />
 
-          <h1 className="max-w-4xl text-5xl font-black leading-[0.9] tracking-[-0.08em] md:text-8xl">
-            VoltageOS <span className="text-gradient">Flashing</span> Guide
-          </h1>
+          <div className="relative">
+            <div className="mb-6 inline-flex items-center gap-2 rounded-full border border-voltage-gold/20 bg-voltage-gold/10 px-4 py-1.5 text-xs font-bold uppercase tracking-[0.2em] text-voltage-gold-light">
+              <Zap size={13} className="text-voltage-gold" />
+              Redmi Note 10
+            </div>
 
-          <p className="mt-6 max-w-2xl text-lg text-slate-300">
-            Read instruction carefully.
-          </p>
+            <h1 className="font-display max-w-3xl text-4xl font-extrabold leading-[0.95] tracking-tight md:text-6xl lg:text-7xl">
+              VoltageOS{" "}
+              <span className="text-gradient">Flashing</span> Guide
+            </h1>
 
-          <div className="mt-8 flex flex-wrap gap-3">
-            <a
-              href="https://www.voltageos.com/devices/download/sunny"
-              target="_blank"
-              className="inline-flex items-center gap-2 rounded-full bg-cyan-200 px-5 py-3 font-black text-slate-950 transition hover:bg-white"
-            >
-              Official VoltageOS Website <ExternalLink size={17} />
-            </a>
-            <a
-              href="#recovery"
-              className="inline-flex items-center gap-2 rounded-full border border-cyan-200/15 bg-white/5 px-5 py-3 font-black text-white transition hover:bg-cyan-300/10"
-            >
-              Start Guide <ArrowRight size={17} />
-            </a>
+            <p className="mt-5 max-w-xl text-base text-voltage-muted md:text-lg">
+              Everything you need to install VoltageOS on sunny/mojito — recovery,
+              firmware, ROM, and updates in one place.
+            </p>
+
+            <div className="mt-8 flex flex-wrap gap-3">
+              <a
+                href="https://www.voltageos.com/devices/download/sunny"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="btn-primary"
+              >
+                Official Website <ExternalLink size={16} />
+              </a>
+              <a href="#recovery" className="btn-ghost">
+                Start Guide <ArrowRight size={16} />
+              </a>
+            </div>
           </div>
         </motion.div>
 
         <motion.aside
           initial={{ opacity: 0, y: 28 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.65, delay: 0.12 }}
-          className="glass rounded-[2rem] p-6"
+          transition={{ duration: 0.6, delay: 0.1 }}
+          className="glass rounded-3xl p-6"
         >
-          <div className="mb-5 inline-flex rounded-full bg-cyan-200 px-3 py-1 text-xs font-black text-slate-950">
+          <div className="mb-4 inline-flex rounded-full bg-gold-gradient px-3 py-1 text-xs font-bold text-voltage-bg">
             Android 16
           </div>
-          <h2 className="text-2xl font-black text-white">Device Card</h2>
-          <div className="mt-5 space-y-4">
+          <h2 className="font-display text-xl font-bold text-white">Device Info</h2>
+          <dl className="mt-5 space-y-0">
             {[
               ["Device", "Redmi Note 10"],
               ["Codename", "sunny / mojito"],
               ["ROM", "VoltageOS"],
               ["Install", "Recovery + ADB sideload"],
-            ].map(([k, v]) => (
-              <div key={k} className="flex items-center justify-between gap-3 border-b border-white/10 pb-3">
-                <span className="text-sm font-bold text-slate-400">{k}</span>
-                <span className="text-right font-black text-white">{v}</span>
+            ].map(([k, v], i) => (
+              <div
+                key={k}
+                className={`flex items-center justify-between gap-3 py-3.5 ${
+                  i < 3 ? "border-b border-voltage-gold/10" : ""
+                }`}
+              >
+                <dt className="text-sm text-voltage-muted">{k}</dt>
+                <dd className="text-right text-sm font-semibold text-white">{v}</dd>
               </div>
             ))}
-          </div>
+          </dl>
         </motion.aside>
       </section>
 
-      <section className="mx-auto max-w-7xl px-4">
-        <div className="glass rounded-[2rem] border-pink-300/20 bg-pink-500/[0.06] p-5">
+      <section className="mx-auto max-w-6xl px-5">
+        <motion.div
+          {...fadeUp}
+          className="rounded-2xl border border-voltage-ember/25 bg-voltage-ember/10 p-5"
+        >
           <div className="flex gap-4">
-            <AlertTriangle className="mt-1 shrink-0 text-pink-300" />
+            <div className="grid h-10 w-10 shrink-0 place-items-center rounded-xl bg-voltage-ember/20">
+              <AlertTriangle className="text-voltage-amber" size={20} />
+            </div>
             <div>
-              <h2 className="text-xl font-black text-white">Read before flashing</h2>
-              <p className="mt-1 text-slate-300">
-                Unlocking and flashing can wipe your data. Back up everything first. Use only files
-                made for your exact device. You are responsible for your device.
+              <h2 className="font-display font-bold text-white">Read before flashing</h2>
+              <p className="mt-1.5 text-sm leading-relaxed text-voltage-muted md:text-base">
+                Unlocking and flashing can wipe your data. Back up everything first. Use only
+                files made for your exact device. You are responsible for your device.
               </p>
             </div>
           </div>
-        </div>
+        </motion.div>
       </section>
 
-      <section className="mx-auto grid max-w-7xl gap-5 px-4 py-5 md:grid-cols-2">
-        <div className="glass rounded-[2rem] p-6">
+      <section className="mx-auto grid max-w-6xl gap-6 px-5 py-8 md:grid-cols-2">
+        <motion.div {...fadeUp} className="glass rounded-3xl p-6 md:p-7">
           <SectionTitle tag="Checklist" title="Requirements" icon={ShieldCheck} />
-          <div className="grid gap-3">
+          <ul className="grid gap-2.5">
             {requirements.map((item) => (
-              <div key={item} className="flex items-center gap-3 rounded-2xl bg-white/[0.045] p-3">
-                <CheckCircle2 className="shrink-0 text-cyan-300" size={19} />
-                <span className="font-semibold text-slate-200">{item}</span>
-              </div>
+              <li
+                key={item}
+                className="flex items-center gap-3 rounded-xl bg-voltage-surface/50 px-4 py-3"
+              >
+                <CheckCircle2 className="shrink-0 text-voltage-gold" size={18} />
+                <span className="text-sm font-medium text-white/90">{item}</span>
+              </li>
             ))}
-          </div>
-        </div>
+          </ul>
+        </motion.div>
 
-        <div className="glass rounded-[2rem] p-6">
+        <motion.div {...fadeUp} className="glass rounded-3xl p-6 md:p-7">
           <SectionTitle tag="Files" title="Downloads" icon={MonitorDown} />
-          <div className="grid gap-3">
+          <ul className="grid gap-2.5">
             {downloads.map((item) => {
               const Icon = item.icon;
               return (
-                <a
-                  key={item.title}
-                  href={item.href}
-                  target="_blank"
-                  className="group flex gap-4 rounded-2xl border border-cyan-200/10 bg-white/[0.045] p-4 transition hover:border-cyan-200/30 hover:bg-cyan-300/[0.08]"
-                >
-                  <Icon className="shrink-0 text-cyan-300" />
-                  <div>
-                    <h3 className="font-black text-white group-hover:text-cyan-100">{item.title}</h3>
-                    <p className="text-sm text-slate-400">{item.desc}</p>
-                  </div>
-                </a>
+                <li key={item.title}>
+                  <a
+                    href={item.href}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="group flex gap-4 rounded-xl border border-transparent bg-voltage-surface/50 p-4 transition hover:border-voltage-gold/20 hover:bg-voltage-gold/[0.06]"
+                  >
+                    <div className="grid h-9 w-9 shrink-0 place-items-center rounded-lg bg-voltage-gold/10">
+                      <Icon className="text-voltage-gold" size={18} />
+                    </div>
+                    <div>
+                      <h3 className="font-semibold text-white group-hover:text-voltage-gold-light">
+                        {item.title}
+                      </h3>
+                      <p className="mt-0.5 text-sm text-voltage-muted">{item.desc}</p>
+                    </div>
+                  </a>
+                </li>
               );
             })}
-          </div>
-        </div>
+          </ul>
+        </motion.div>
       </section>
 
-      <section id="recovery" className="mx-auto max-w-7xl px-4 py-5">
-        <div className="glass rounded-[2rem] p-5 md:p-8">
+      <section id="recovery" className="mx-auto max-w-6xl px-5 py-4">
+        <motion.div {...fadeUp} className="glass rounded-3xl p-6 md:p-8">
           <SectionTitle tag="Step 1" title="Flashing Recovery" icon={Smartphone} />
-          <div className="grid gap-4">
+          <div className="grid gap-3">
             {stepsRecovery.map((step, idx) => (
               <StepCard key={step.title} index={idx + 1} {...step} />
             ))}
           </div>
-        </div>
+        </motion.div>
       </section>
 
-      <section id="firmware" className="mx-auto max-w-7xl px-4 py-5">
-        <div className="glass rounded-[2rem] p-5 md:p-8">
-          <SectionTitle tag="Step 2" title="Flashing Firmware (Skip if already installed)" icon={Cpu} />
+      <section id="firmware" className="mx-auto max-w-6xl px-5 py-4">
+        <motion.div {...fadeUp} className="glass rounded-3xl p-6 md:p-8">
+          <SectionTitle
+            tag="Step 2"
+            title="Flashing Firmware"
+            icon={Cpu}
+          />
+          <p className="-mt-4 mb-6 text-sm text-voltage-muted">
+            Skip this step if firmware is already installed.
+          </p>
           <div className="grid gap-4 md:grid-cols-2">
-            <div className="rounded-3xl border border-cyan-200/10 bg-white/[0.045] p-5">
-              <h3 className="text-xl font-black text-white">Fastboot method</h3>
-              <p className="mt-1 text-slate-300">Use this when your firmware zip is fastboot flashable.</p>
-              <CodeBlock label="Fastboot" code={"fastboot update --skip-reboot sunny-fw.zip"} />
+            <div className="rounded-2xl border border-voltage-gold/10 bg-voltage-surface/40 p-5">
+              <h3 className="font-display font-bold text-white">Fastboot method</h3>
+              <p className="mt-1 text-sm text-voltage-muted">
+                Use when your firmware zip is fastboot flashable.
+              </p>
+              <CodeBlock label="Fastboot" code="fastboot update --skip-reboot sunny-fw.zip" />
             </div>
-            <div className="rounded-3xl border border-cyan-200/10 bg-white/[0.045] p-5">
-              <h3 className="text-xl font-black text-white">Recovery method</h3>
-              <p className="mt-1 text-slate-300">Use this when the firmware package is meant for recovery sideload.</p>
-              <CodeBlock label="ADB" code={"fastboot reboot recovery\nadb sideload firmware.zip"} />
+            <div className="rounded-2xl border border-voltage-gold/10 bg-voltage-surface/40 p-5">
+              <h3 className="font-display font-bold text-white">Recovery method</h3>
+              <p className="mt-1 text-sm text-voltage-muted">
+                Use when the firmware package is meant for recovery sideload.
+              </p>
+              <CodeBlock
+                label="ADB"
+                code={"fastboot reboot recovery\nadb sideload firmware.zip"}
+              />
             </div>
           </div>
-          <p className="mt-5 rounded-2xl border border-cyan-200/15 bg-cyan-300/[0.06] p-4 font-semibold text-slate-300">
-            Use the firmware recommended by the maintainer. Wrong firmware can cause boot, modem,
-            recovery, or network issues.
+          <p className="mt-5 rounded-xl border border-voltage-gold/15 bg-voltage-gold/[0.06] p-4 text-sm leading-relaxed text-voltage-muted">
+            Use the firmware recommended by the maintainer. Wrong firmware can cause boot,
+            modem, recovery, or network issues.
           </p>
-        </div>
+        </motion.div>
       </section>
 
-      <section id="rom" className="mx-auto max-w-7xl px-4 py-5">
-        <div className="glass rounded-[2rem] p-5 md:p-8">
+      <section id="rom" className="mx-auto max-w-6xl px-5 py-4">
+        <motion.div {...fadeUp} className="glass rounded-3xl p-6 md:p-8">
           <SectionTitle tag="Step 3" title="Flashing ROM" icon={Zap} />
-          <div className="grid gap-4">
+          <div className="grid gap-3">
             {stepsRom.map((step, idx) => (
               <StepCard key={step.title} index={idx + 1} {...step} />
             ))}
           </div>
-        </div>
+        </motion.div>
       </section>
 
-      <section id="update" className="mx-auto max-w-7xl px-4 py-5">
-        <div className="glass rounded-[2rem] p-5 md:p-8">
+      <section id="update" className="mx-auto max-w-6xl px-5 py-4">
+        <motion.div {...fadeUp} className="glass rounded-3xl p-6 md:p-8">
           <SectionTitle tag="Maintenance" title="Updating VoltageOS" icon={RefreshCw} />
           <div className="grid gap-4 md:grid-cols-2">
-            <div className="rounded-3xl border border-cyan-200/10 bg-white/[0.045] p-5">
-              <h3 className="text-xl font-black text-white">OTA update</h3>
-              <ol className="mt-4 list-decimal space-y-2 pl-5 text-slate-300">
+            <div className="rounded-2xl border border-voltage-gold/10 bg-voltage-surface/40 p-5">
+              <h3 className="font-display font-bold text-white">OTA update</h3>
+              <ol className="mt-4 list-decimal space-y-2 pl-5 text-sm text-voltage-muted">
                 <li>Open Settings.</li>
                 <li>Go to About Phone.</li>
                 <li>Check for updates and download.</li>
                 <li>Reboot when asked.</li>
               </ol>
             </div>
-            <div className="rounded-3xl border border-cyan-200/10 bg-white/[0.045] p-5">
-              <h3 className="text-xl font-black text-white">Manual dirty flash</h3>
-              <ol className="mt-4 list-decimal space-y-2 pl-5 text-slate-300">
+            <div className="rounded-2xl border border-voltage-gold/10 bg-voltage-surface/40 p-5">
+              <h3 className="font-display font-bold text-white">Manual dirty flash</h3>
+              <ol className="mt-4 list-decimal space-y-2 pl-5 text-sm text-voltage-muted">
                 <li>Boot to VoltageOS recovery.</li>
                 <li>Choose Apply update from ADB.</li>
                 <li>Run adb sideload with the new VoltageOS zip.</li>
@@ -432,25 +478,32 @@ export default function Page() {
               </ol>
             </div>
           </div>
-        </div>
+        </motion.div>
       </section>
 
-      <section id="help" className="mx-auto max-w-7xl px-4 py-5">
-        <div className="glass rounded-[2rem] p-5 md:p-8">
+      <section id="help" className="mx-auto max-w-6xl px-5 py-4 pb-16">
+        <motion.div {...fadeUp} className="glass rounded-3xl p-6 md:p-8">
           <SectionTitle tag="Support" title="Troubleshooting" icon={AlertTriangle} />
-          <div className="grid gap-3">
+          <div className="grid gap-2.5">
             {faqs.map((faq) => (
-              <details key={faq.q} className="rounded-2xl border border-cyan-200/10 bg-white/[0.045] p-4">
-                <summary className="cursor-pointer font-black text-white">{faq.q}</summary>
-                <p className="mt-3 text-slate-300">{faq.a}</p>
+              <details
+                key={faq.q}
+                className="rounded-xl border border-voltage-gold/10 bg-voltage-surface/40 p-4 transition open:border-voltage-gold/25 open:bg-voltage-gold/[0.04]"
+              >
+                <summary className="cursor-pointer pr-8 font-semibold text-white">
+                  {faq.q}
+                </summary>
+                <p className="mt-3 text-sm leading-relaxed text-voltage-muted">{faq.a}</p>
               </details>
             ))}
           </div>
-        </div>
+        </motion.div>
       </section>
 
-      <footer className="mx-auto max-w-7xl px-4 py-10 text-center text-sm font-semibold text-slate-500">
-        - ZNAIV -
+      <footer className="border-t border-voltage-gold/10 py-8 text-center">
+        <p className="font-display text-sm font-semibold tracking-widest text-voltage-muted">
+          ZNAIV
+        </p>
       </footer>
     </main>
   );
